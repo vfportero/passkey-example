@@ -19,6 +19,7 @@ jobs:
         with:
           submodules: true
       - uses: actions/setup-node@master
+      - working-directory: ./passkey-example-frontend
       - run: npm install
       - run: npm run build
       - name: Build And Deploy
