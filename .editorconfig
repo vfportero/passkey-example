@@ -1,0 +1,132 @@
+# EditorConfig is awesome:http://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Don't use tabs for indentation.
+[*]
+indent_style = space
+charset = utf-8
+trim_trailing_whitespace = true
+# (Please don't specify an indent_size here; that has too many unintended consequences.)
+
+# Code files
+[*.{cs,csx,vb,vbx,fs,fsx}]
+indent_size = 4
+max_line_length = 140
+insert_final_newline = true
+
+[*.{ts,js,vue}]
+indent_size = 2
+max_line_length = 140
+insert_final_newline = true
+quote_type = single
+
+[*.{json}]
+indent_size = 2
+trim_trailing_whitespace = false
+
+[*.{scss,css}]
+indent_size = 2
+max_line_length = 140
+insert_final_newline = true
+quote_type = double
+
+[*.{cshtml,vbhtml,html}]
+indent_size = 4
+max_line_length = 140
+insert_final_newline = false
+
+## Other file types
+[*.{ps1,psm1}]
+indent_size = 4
+
+[*.sh]
+indent_size = 4
+end_of_line = lf
+
+# Dotnet code style settings:
+[*.{cs,vb}]
+# Sort using and Import directives with System.* appearing first
+dotnet_sort_system_directives_first = true
+# Avoid "this." and "Me." if not necessary (IDE0003)
+dotnet_style_qualification_for_field = false:suggestion
+dotnet_style_qualification_for_property = false:suggestion
+dotnet_style_qualification_for_method = false:suggestion
+dotnet_style_qualification_for_event = false:suggestion
+
+# Use language keywords instead of framework type names for type references
+dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
+dotnet_style_predefined_type_for_member_access = true:suggestion
+
+# Suggest more modern language features when available
+# See full list: https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/
+dotnet_style_object_initializer = true:suggestion # IDE0017
+dotnet_style_collection_initializer = true:suggestion # IDE0028
+dotnet_style_coalesce_expression = true:suggestion # IDE0029
+dotnet_style_null_propagation = true:suggestion # IDE0031
+dotnet_style_explicit_tuple_names = true:suggestion # IDE0033
+
+# CSharp code style settings:
+[*.cs]
+# Namespace
+csharp_style_namespace_declarations = file_scoped:warning
+
+# Using position
+csharp_using_directive_placement = outside_namespace
+
+# Braces
+csharp_prefer_braces = true:warning # Open for debate
+
+# Prefer "var" everywhere
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = true:suggestion
+
+# Prefer method-like constructs to have a block body
+csharp_style_expression_bodied_methods = false:none # IDE0022
+csharp_style_expression_bodied_constructors = false:none # IDE0021
+csharp_style_expression_bodied_operators = false:none # IDE0023 IDE0024
+
+# Prefer property-like constructs to have an expression-body
+csharp_style_expression_bodied_properties = when_on_single_line:none # IDE0025
+csharp_style_expression_bodied_indexers = true:none # IDE0026
+csharp_style_expression_bodied_accessors = true:none # IDE0027
+csharp_style_expression_bodied_lambdas = true:none # IDE0053
+csharp_style_expression_bodied_local_functions = true:none # IDE0061
+
+# Suggest more modern language features when available
+csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
+csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
+csharp_style_inlined_variable_declaration = true:suggestion
+csharp_style_throw_expression = true:suggestion
+csharp_style_conditional_delegate_call = true:suggestion
+
+# Spacing settings
+csharp_space_after_cast = true
+
+# Newline settings
+csharp_new_line_before_open_brace = all # Allman style
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+# csharp_new_line_before_members_in_object_initializers = true
+csharp_new_line_before_members_in_object_initializers = false
+csharp_new_line_before_members_in_anonymous_types = true
+
+# ReSharper properties
+resharper_max_attribute_length_for_same_line = 0
+resharper_space_within_single_line_array_initializer_braces = true
+resharper_place_accessorholder_attribute_on_same_line = false
+resharper_csharp_wrap_arguments_style = chop_if_long
+resharper_csharp_wrap_parameters_style = chop_if_long
+resharper_csharp_wrap_after_declaration_lpar = true
+resharper_csharp_keep_blank_lines_in_declarations = 1
+resharper_csharp_blank_lines_around_invocable = 1
+resharper_csharp_wrap_after_invocation_lpar = true
+resharper_object_creation_when_type_evident = target_typed
+resharper_object_creation_when_type_not_evident = explicitly_typed
+
+[*.md]
+insert_final_newline = false
+trim_trailing_whitespace = false
