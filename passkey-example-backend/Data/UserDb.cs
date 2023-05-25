@@ -9,4 +9,6 @@ public class UserDb : DbContext
     }
 
     public DbSet<User> Users { get; set; }
+
+    public DbSet<UserCredential> UserCredentials { get; set; }
 }

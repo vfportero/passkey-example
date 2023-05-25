@@ -18,18 +18,20 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const storegeService = new StorageService();
+const apiService = new ApiService();
+const passKeyService = new PasskeyService();
 
 const fetchUser = async () => {
   var userId = storegeService.getAuthenticatedUserId();
-  return await new ApiService().getUser(userId!);
+  return await apiService.getUser(userId!);
 };
 
 const getBrowserHasPasskeyFeature = async () => {
-  return await new PasskeyService().browserHasPasskeyFeature();
+  return await passKeyService.browserHasPasskeyFeature();
 };
 
 const createNewPassKey = async () => {
-  return await new PasskeyService().createPasskey('userId', 'email@test.com');
+  return await passKeyService.createPasskey(user.value?.email);
 };
 
 const signOut = () => {

@@ -14,6 +14,24 @@ export class ApiService {
     return response.json();
   };
 
+  makeCredentialOptions = async (email: string) => {
+    const response = await fetch(`${this.apiUrl}/makeCredentialOptions`, {
+      method: 'POST',
+      body: JSON.stringify({
+        userName: email,
+        displayName: email,
+        attType: 'none',
+        authType: 'platform',
+        userVerification: 'required',
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+
+    return response.json();
+  };
+
   getUser = async (id: string): Promise<{ id: string; email: string }> => {
     const response = await fetch(`${this.apiUrl}/users/${id}`);
     return response.json();
