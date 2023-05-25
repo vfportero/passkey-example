@@ -21,6 +21,7 @@ jobs:
       - uses: actions/setup-node@master
       - name: Install
         working-directory: ./passkey-example-frontend
+        run: npm install
       - name: Build
         working-directory: ./passkey-example-frontend
         run: npm run build
