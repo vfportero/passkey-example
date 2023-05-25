@@ -19,9 +19,11 @@ jobs:
         with:
           submodules: true
       - uses: actions/setup-node@master
-      - working-directory: ./passkey-example-frontend
-      - run: npm install
-      - run: npm run build
+      - name: Install
+        working-directory: ./passkey-example-frontend
+      - name: Build
+        working-directory: ./passkey-example-frontend
+        run: npm run build
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
