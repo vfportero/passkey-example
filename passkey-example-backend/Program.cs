@@ -9,6 +9,7 @@
  builder.Services.AddSession();
  var app = builder.Build();
  app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+ app.UseSession();
 
  app.MapGet("/", () => "Hello World!");
  app.MapGet("/users", ListUsers);
