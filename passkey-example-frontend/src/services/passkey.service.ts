@@ -20,7 +20,7 @@ export class PasskeyService {
       challenge: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]).buffer,
       rp: {
         name: 'Example',
-        id: 'localhost',
+        id: process.env.VUE_APP_DOMAIN ?? 'localhost',
       },
       user: {
         id: new TextEncoder().encode(userId),

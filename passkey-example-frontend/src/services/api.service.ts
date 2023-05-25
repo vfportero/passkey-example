@@ -1,5 +1,5 @@
 export class ApiService {
-  apiUrl = 'https://localhost:8081';
+  apiUrl = process.env.VUE_APP_BASE_API_URL ?? 'https://localhost:8081';
 
   createUser = async (email: string) => {
     const response = await fetch(`${this.apiUrl}/users`, {
