@@ -7,6 +7,7 @@
  builder.Services.AddCors();
  builder.Services.AddFido2(builder.Configuration);
  builder.Services.AddSession();
+ builder.Services.AddDistributedMemoryCache();
  var app = builder.Build();
  app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
  app.UseSession();
