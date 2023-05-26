@@ -21,6 +21,7 @@
      options.Cookie.SameSite = SameSiteMode.Unspecified;
  });
  builder.Services.AddDistributedMemoryCache();
+ builder.Services.AddApplicationInsightsTelemetry();
  var app = builder.Build();
  app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
  app.UseSession();
