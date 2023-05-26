@@ -1,4 +1,5 @@
 import { ApiService } from './api.service';
+import { base32 } from 'rfc4648';
 
 export class PasskeyService {
   browserHasPasskeyFeature = async () => {
@@ -15,11 +16,10 @@ export class PasskeyService {
     const apiService = new ApiService();
     const creadentialOptions = await apiService.makeCredentialOptions(userEmail);
 
-    creadentialOptions.challenge = Uint8Array.from(atob(creadentialOptions.challenge), (c) => c.charCodeAt(0));
-    creadentialOptions.user.id = Uint8Array.from(atob(creadentialOptions.user.id), (c) => c.charCodeAt(0));
+    creadentialOptions.challenge = base32.parse(creadentialOptions.challenge);
+    creadentialOptions.user.id = base32.parse(creadentialOptions.user.id);
     creadentialOptions.excludeCredentials = creadentialOptions.excludeCredentials.map((c: any) => {
-      c.id = Uint8Array.from(atob(c.id), (c) => c.charCodeAt(0));
-      return c;
+      c.id = base32.parse(c.id);
     });
 
     // const publicKeyCredentialCreationOptions: PublicKeyCredentialCreationOptions = {
