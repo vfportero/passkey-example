@@ -33,6 +33,38 @@ export class PasskeyService {
     return thing;
   };
 
+  coerceToBase64Url = function (thing: any) {
+    // Array or ArrayBuffer to Uint8Array
+    if (Array.isArray(thing)) {
+      thing = Uint8Array.from(thing);
+    }
+
+    if (thing instanceof ArrayBuffer) {
+      thing = new Uint8Array(thing);
+    }
+
+    // Uint8Array to base64
+    if (thing instanceof Uint8Array) {
+      let str = '';
+      const len = thing.byteLength;
+
+      for (let i = 0; i < len; i++) {
+        str += String.fromCharCode(thing[i]);
+      }
+      thing = window.btoa(str);
+    }
+
+    if (typeof thing !== 'string') {
+      throw new Error('could not coerce to string');
+    }
+
+    // base64 to base64url
+    // NOTE: "=" at the end of challenge is optional, strip it off here
+    thing = thing.replace(/\+/g, '-').replace(/\//g, '_').replace(/=*$/g, '');
+
+    return thing;
+  };
+
   browserHasPasskeyFeature = async () => {
     if (window.PublicKeyCredential) {
       const isCMSupported = (await (PublicKeyCredential as any).isConditionalMediationAvailable?.()) ?? false;
@@ -53,36 +85,25 @@ export class PasskeyService {
       c.id = this.coerceToArrayBuffer(c.id);
     });
 
-    // const publicKeyCredentialCreationOptions: PublicKeyCredentialCreationOptions = {
-    //   challenge: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]).buffer,
-    //   rp: {
-    //     name: 'Example',
-    //     id: process.env.VUE_APP_DOMAIN ?? 'localhost',
-    //   },
-    //   user: {
-    //     id: new TextEncoder().encode(userId),
-    //     name: userEmail,
-    //     displayName: userEmail,
-    //   },
-    //   pubKeyCredParams: [
-    //     { alg: -7, type: 'public-key' },
-    //     { alg: -257, type: 'public-key' },
-    //   ],
-    //   // excludeCredentials: [{
-    //   //   id: *****,
-    //   //   type: 'public-key',
-    //   //   transports: ['internal'],
-    //   // }],
-    //   authenticatorSelection: {
-    //     authenticatorAttachment: 'platform',
-    //     requireResidentKey: true,
-    //   },
-    // };
-
-    const credential = await navigator.credentials.create({
+    const credential = (await navigator.credentials.create({
       publicKey: creadentialOptions,
-    });
+    })) as any;
 
-    console.log(credential);
+    const attestationObject = new Uint8Array(credential?.attestationObject);
+    const clientDataJSON = new Uint8Array(credential?.clientDataJSON);
+    const rawId = new Uint8Array(credential?.rawId);
+
+    const makeCredentialRequest = {
+      id: credential?.id,
+      rawId: this.coerceToBase64Url(rawId),
+      type: credential?.type,
+      extensions: credential?.getClientExtensionResults(),
+      response: {
+        AttestationObject: this.coerceToBase64Url(attestationObject),
+        clientDataJSON: this.coerceToBase64Url(clientDataJSON),
+      },
+    };
+
+    return await apiService.addUserCredential(makeCredentialRequest);
   };
 }

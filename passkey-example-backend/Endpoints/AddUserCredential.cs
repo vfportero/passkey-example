@@ -5,7 +5,7 @@ using passkey_example_backend.Data;
 
 namespace passkey_example_backend.Endpoints;
 
-public static class MakeCredential
+public static class AddUserCredential
 {
     public static async Task<IResult> Execute(
         HttpContext httpContext,

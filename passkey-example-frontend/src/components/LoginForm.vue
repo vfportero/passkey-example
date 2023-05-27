@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="createUser">
-    <input type="text" v-model="email" placeholder="email" />
+    <input type="text" v-model="email" placeholder="email" autocomplete="username webauthn" />
     <button type="submit">Enter</button>
   </form>
 </template>
