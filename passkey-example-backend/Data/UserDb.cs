@@ -11,4 +11,13 @@ public class UserDb : DbContext
     public DbSet<User> Users { get; set; }
 
     public DbSet<UserCredential> UserCredentials { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Credentials)
+            .WithOne(c => c.User)
+            .HasForeignKey(c => c.Id)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
 }

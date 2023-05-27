@@ -10,7 +10,7 @@ public class User
 public class UserCredential
 {
     public Guid Id { get; set; } = Guid.NewGuid();
-    public Guid UserId { get; set; }
+    public User User { get; set; }
     public string DescriptorJson { get; set; }
     public byte[] PublicKey { get; set; }
     public byte[] UserHandle { get; set; }
