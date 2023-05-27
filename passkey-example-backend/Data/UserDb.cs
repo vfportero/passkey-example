@@ -17,7 +17,7 @@ public class UserDb : DbContext
         modelBuilder.Entity<User>()
             .HasMany(u => u.Credentials)
             .WithOne(c => c.User)
-            .HasForeignKey(c => c.Id)
+            .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -57,7 +57,7 @@ public static class AddUserCredential
 
             dbUser.Credentials.Add(new UserCredential()
             {
-                User = dbUser,
+                UserId = dbUser.Id,
                 DescriptorJson = JsonSerializer.Serialize(success.Result.CredentialId),
                 PublicKey = success.Result.PublicKey,
                 UserHandle = success.Result.User.Id,
