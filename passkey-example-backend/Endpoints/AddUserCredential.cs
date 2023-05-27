@@ -5,21 +5,23 @@ using passkey_example_backend.Data;
 
 namespace passkey_example_backend.Endpoints;
 
+public record AddUserCredentialRequest(AuthenticatorAttestationRawResponse AttestationResponse, string CredentialOptions);
+
 public static class AddUserCredential
 {
+
     public static async Task<IResult> Execute(
         // HttpContext httpContext,
         [FromServices] IFido2 fido2,
         UserDb db,
-        [FromBody] AuthenticatorAttestationRawResponse attestationResponse,
-        [FromBody] string credentialOptions
+        [FromBody] AddUserCredentialRequest request
     )
     {
         try
         {
             // 1. get the options we sent the client
             // var credentialOptions = httpContext.Session.GetString("fido2.attestationOptions");
-            var options = CredentialCreateOptions.FromJson(credentialOptions);
+            var options = CredentialCreateOptions.FromJson(request.CredentialOptions);
 
             // 2. Create callback so that lib can verify credential id is unique to this user
             IsCredentialIdUniqueToUserAsyncDelegate callback = async (args, cancellationToken) =>
@@ -43,7 +45,7 @@ public static class AddUserCredential
             };
 
             // 2. Verify and make the credentials
-            var success = await fido2.MakeNewCredentialAsync(attestationResponse, options, callback);
+            var success = await fido2.MakeNewCredentialAsync(request.AttestationResponse, options, callback);
 
             // 3. Store the credentials in db
             var dbUser = db.Users.FirstOrDefault(x => x.Email == success.Result.User.Name);
