@@ -44,7 +44,7 @@
 
  static async Task<IResult> ListUsers(UserDb db)
  {
-     var users = await db.Users.ToListAsync();
+     var users = await db.Users.Include(u => u.Credentials).ToListAsync();
      return Results.Ok(users);
  }
 
