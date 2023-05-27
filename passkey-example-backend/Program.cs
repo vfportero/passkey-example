@@ -37,6 +37,7 @@
  app.MapGet("/", () => "Hello World!");
  app.MapGet("/users", ListUsers);
  app.MapGet("/users/{id}", GetUser);
+ app.MapGet("/users/{id}/credentials", GetUserCredentials);
  app.MapPost("/users", CreateUser);
  app.MapPost("/users/addCredential", AddUserCredential.Execute);
  app.MapPost("/makeCredentialOptions", MakeCredentialOptions.Execute);
@@ -56,6 +57,16 @@
          return Results.NotFound();
      }
      return Results.Ok(user);
+ }
+
+ static async Task<IResult> GetUserCredentials(UserDb db, Guid id)
+ {
+     var userCredentials = await db.UserCredentials.Where(x => x.UserId == id).ToListAsync();
+     if (userCredentials?.Any() == false)
+     {
+         return Results.NotFound();
+     }
+     return Results.Ok(userCredentials);
  }
 
  static async Task<IResult> CreateUser(UserDb db, User user)
