@@ -19,7 +19,7 @@ public static class MakeCredentialOptions
     }
 
     public static async Task<IResult> Execute(
-        HttpContext httpContext,
+        // HttpContext httpContext,
         [FromServices] IFido2 fido2,
         UserDb db,
         [FromBody] MakeCredentialsRequest request)
@@ -70,7 +70,7 @@ public static class MakeCredentialOptions
                 exts);
 
             // 4. Temporarily store options, session/in-memory cache/redis/db
-            httpContext.Session.SetString("fido2.attestationOptions", options.ToJson());
+            // httpContext.Session.SetString("fido2.attestationOptions", options.ToJson());
 
             // 5. return options to client
             return Results.Json(options);

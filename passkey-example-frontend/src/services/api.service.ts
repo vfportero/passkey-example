@@ -32,10 +32,13 @@ export class ApiService {
     return response.json();
   };
 
-  addUserCredential = async (credential: any) => {
+  addUserCredential = async (attestationResponse: any, credentialOptions: string) => {
     const response = await fetch(`${this.apiUrl}/users/addCredential`, {
       method: 'POST',
-      body: JSON.stringify(credential),
+      body: JSON.stringify({
+        attestationResponse,
+        credentialOptions,
+      }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },

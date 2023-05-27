@@ -79,6 +79,8 @@ export class PasskeyService {
     const apiService = new ApiService();
     const creadentialOptions = await apiService.makeCredentialOptions(userEmail);
 
+    const credentialOptionsJson = JSON.stringify(creadentialOptions);
+
     creadentialOptions.challenge = this.coerceToArrayBuffer(creadentialOptions.challenge);
     creadentialOptions.user.id = this.coerceToArrayBuffer(creadentialOptions.user.id);
     creadentialOptions.excludeCredentials = creadentialOptions.excludeCredentials.map((c: any) => {
@@ -104,6 +106,6 @@ export class PasskeyService {
       },
     };
 
-    return await apiService.addUserCredential(makeCredentialRequest);
+    return await apiService.addUserCredential(makeCredentialRequest, creadentialOptions);
   };
 }

@@ -8,17 +8,18 @@ namespace passkey_example_backend.Endpoints;
 public static class AddUserCredential
 {
     public static async Task<IResult> Execute(
-        HttpContext httpContext,
+        // HttpContext httpContext,
         [FromServices] IFido2 fido2,
         UserDb db,
-        [FromBody] AuthenticatorAttestationRawResponse attestationResponse
+        [FromBody] AuthenticatorAttestationRawResponse attestationResponse,
+        [FromBody] string credentialOptions
     )
     {
         try
         {
             // 1. get the options we sent the client
-            var jsonOptions = httpContext.Session.GetString("fido2.attestationOptions");
-            var options = CredentialCreateOptions.FromJson(jsonOptions);
+            // var credentialOptions = httpContext.Session.GetString("fido2.attestationOptions");
+            var options = CredentialCreateOptions.FromJson(credentialOptions);
 
             // 2. Create callback so that lib can verify credential id is unique to this user
             IsCredentialIdUniqueToUserAsyncDelegate callback = async (args, cancellationToken) =>

@@ -5,6 +5,15 @@
  var builder = WebApplication.CreateBuilder(args);
  builder.Services.AddDbContext<UserDb>(options => options.UseInMemoryDatabase("users"));
  builder.Services.AddCors();
+ builder.Services.AddMemoryCache();
+ builder.Services.AddDistributedMemoryCache();
+ builder.Services.AddSession(options =>
+ {
+     options.IdleTimeout = TimeSpan.FromMinutes(2);
+     options.Cookie.HttpOnly = true;
+     options.Cookie.SameSite = SameSiteMode.Unspecified;
+     options.Cookie.IsEssential = true;
+ });
  builder.Services.AddFido2(
      options =>
      {
@@ -13,14 +22,13 @@
          options.Origins = builder.Configuration.GetSection("fido2:origins").Get<HashSet<string>>();
          options.TimestampDriftTolerance = builder.Configuration.GetValue<int>("fido2:timestampDriftTolerance");
          options.MDSCacheDirPath = builder.Configuration["fido2:MDSCacheDirPath"];
-     });
- builder.Services.AddSession(options =>
+     }).AddCachedMetadataService(config =>
  {
-     options.IdleTimeout = TimeSpan.FromMinutes(2);
-     options.Cookie.HttpOnly = true;
-     options.Cookie.SameSite = SameSiteMode.Unspecified;
+     config.AddFidoMetadataRepository(httpClientBuilder =>
+     {
+         //TODO: any specific config you want for accessing the MDS
+     });
  });
- builder.Services.AddDistributedMemoryCache();
  builder.Services.AddApplicationInsightsTelemetry();
  var app = builder.Build();
  app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
