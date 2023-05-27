@@ -106,6 +106,6 @@ export class PasskeyService {
       },
     };
 
-    return await apiService.addUserCredential(makeCredentialRequest, creadentialOptions);
+    return await apiService.addUserCredential(makeCredentialRequest, credentialOptionsJson);
   };
 }
