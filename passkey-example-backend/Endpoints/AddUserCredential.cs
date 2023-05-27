@@ -55,7 +55,7 @@ public static class AddUserCredential
                 return Results.Json((new Fido2.CredentialMakeResult(status: "error", errorMessage: $"User {success.Result.User.Name} not found", result: null)));
             }
 
-            dbUser.Credentials.Add(new UserCredential()
+            await db.UserCredentials.AddAsync(new UserCredential()
             {
                 UserId = dbUser.Id,
                 DescriptorJson = JsonSerializer.Serialize(success.Result.CredentialId),
