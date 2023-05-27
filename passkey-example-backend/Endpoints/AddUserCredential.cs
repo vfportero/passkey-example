@@ -49,6 +49,12 @@ public static class AddUserCredential
 
             // 3. Store the credentials in db
             var dbUser = db.Users.FirstOrDefault(x => x.Email == success.Result.User.Name);
+
+            if (dbUser == null)
+            {
+                return Results.Json((new Fido2.CredentialMakeResult(status: "error", errorMessage: $"User {success.Result.User.Name} not found", result: null)));
+            }
+
             dbUser.Credentials.Add(new UserCredential()
             {
                 DescriptorJson = JsonSerializer.Serialize(success.Result.CredentialId),
