@@ -91,8 +91,8 @@ export class PasskeyService {
       publicKey: creadentialOptions,
     })) as any;
 
-    const attestationObject = new Uint8Array(credential?.attestationObject);
-    const clientDataJSON = new Uint8Array(credential?.clientDataJSON);
+    const attestationObject = new Uint8Array(credential?.response?.attestationObject);
+    const clientDataJSON = new Uint8Array(credential?.response?.clientDataJSON);
     const rawId = new Uint8Array(credential?.rawId);
 
     const makeCredentialRequest = {
