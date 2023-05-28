@@ -119,6 +119,80 @@ export class PasskeyService {
 
   validatePasskey = async (userEmail: string) => {
     const apiService = new ApiService();
-    const creadentialOptions = await apiService.makeAssertionOptions(userEmail);
+    const makeAssertionOptions = await apiService.makeAssertionOptions(userEmail);
+
+    const makeAssertionOptionsJson = JSON.stringify(makeAssertionOptions);
+
+    // todo: switch this to coercebase64
+    const challenge = makeAssertionOptions.challenge.replace(/-/g, '+').replace(/_/g, '/');
+    makeAssertionOptions.challenge = Uint8Array.from(atob(challenge), (c) => c.charCodeAt(0));
+
+    // fix escaping. Change this to coerce
+    makeAssertionOptions.allowCredentials.forEach(function (listItem: any) {
+      const fixedId = listItem.id.replace(/\\_/g, '/').replace(/\\-/g, '+');
+      listItem.id = Uint8Array.from(atob(fixedId), (c) => c.charCodeAt(0));
+    });
+
+    // ask browser for credentials (browser will ask connected authenticators)
+    let credential;
+    try {
+      credential = (await navigator.credentials.get({ publicKey: makeAssertionOptions })) as any;
+    } catch (err: any) {
+      console.error(err.message ? err.message : err);
+    }
+
+    try {
+      // Move data into Arrays incase it is super long
+      const authData = new Uint8Array(credential.response.authenticatorData);
+      const clientDataJSON = new Uint8Array(credential.response.clientDataJSON);
+      const rawId = new Uint8Array(credential.rawId);
+      const sig = new Uint8Array(credential.response.signature);
+      const data = {
+        id: credential.id,
+        rawId: this.coerceToBase64Url(rawId),
+        type: credential.type,
+        extensions: credential.getClientExtensionResults(),
+        response: {
+          authenticatorData: this.coerceToBase64Url(authData),
+          clientDataJSON: this.coerceToBase64Url(clientDataJSON),
+          signature: this.coerceToBase64Url(sig),
+        },
+      };
+
+      let response;
+      try {
+        const res = await fetch('/makeAssertion', {
+          method: 'POST', // or 'PUT'
+          body: JSON.stringify({
+            ClientResponse: data,
+            AssertionOptions: makeAssertionOptionsJson,
+          }), // data can be `string` or {object}!
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+
+        response = await res.json();
+      } catch (e) {
+        console.error('Request to server failed', e);
+        throw e;
+      }
+
+      console.log('Assertion Object', response);
+
+      // show error
+      if (response.status !== 'ok') {
+        console.log('Error doing assertion');
+        console.log(response.errorMessage);
+        console.error(response.errorMessage);
+      }
+
+      return response;
+    } catch (e) {
+      console.error('Could not verify assertion', e);
+    }
+
+    return null;
   };
 }

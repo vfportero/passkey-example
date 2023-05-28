@@ -43,6 +43,7 @@
  app.MapPost("/users/addCredential", AddUserCredential.Execute);
  app.MapPost("/makeCredentialOptions", MakeCredentialOptions.Execute);
  app.MapPost("/makeAssertionOptions", MakeAssertionOptions.Execute);
+ app.MapPost("/makeAssertion", MakeAssertion.Execute);
 
 
  static async Task<IResult> QueryUsers(UserDb db, [FromQuery] string? q = null)

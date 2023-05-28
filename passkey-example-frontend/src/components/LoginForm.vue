@@ -21,6 +21,7 @@ const router = useRouter();
 const email = ref('');
 const userError = ref('');
 const passKeyService = new PasskeyService();
+const storageService = new StorageService();
 
 const createUser = async () => {
   userError.value = '';
@@ -28,7 +29,7 @@ const createUser = async () => {
 
   if (!userExists) {
     const user = await new ApiService().createUser(email.value);
-    new StorageService().setAuthenticatedUserId(user.id);
+    storageService.setAuthenticatedUserId(user.id);
     // Redirect to user view
 
     router.push({ name: 'User' });
@@ -42,7 +43,13 @@ const login = async () => {
   const userExists = (await new ApiService().queryUser(email.value))?.length > 0;
 
   if (userExists) {
-    passKeyService.validatePasskey(email.value);
+    const validateResponse = await passKeyService.validatePasskey(email.value);
+    if (validateResponse) {
+      storageService.setAuthenticatedUserId(validateResponse.userId);
+      router.push({ name: 'User' });
+    } else {
+      userError.value = 'Passkey validation error';
+    }
   } else {
     userError.value = 'User not exists';
   }
