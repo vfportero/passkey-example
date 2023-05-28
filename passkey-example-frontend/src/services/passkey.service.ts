@@ -123,7 +123,7 @@ export class PasskeyService {
 
     const makeAssertionOptionsJson = JSON.stringify(makeAssertionOptions);
 
-    const challenge = this.coerceToBase64Url(makeAssertionOptions);
+    const challenge = this.coerceToBase64Url(makeAssertionOptions.challenge);
     makeAssertionOptions.challenge = this.coerceToArrayBuffer(challenge);
 
     // fix escaping. Change this to coerce
