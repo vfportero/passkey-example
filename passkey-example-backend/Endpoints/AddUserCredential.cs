@@ -58,7 +58,7 @@ public static class AddUserCredential
             await db.UserCredentials.AddAsync(new UserCredential()
             {
                 UserId = dbUser.Id,
-                DescriptorJson = JsonSerializer.Serialize(success.Result.CredentialId),
+                Descriptor = success.Result.CredentialId,
                 PublicKey = success.Result.PublicKey,
                 UserHandle = success.Result.User.Id,
                 SignatureCounter = success.Result.Counter,

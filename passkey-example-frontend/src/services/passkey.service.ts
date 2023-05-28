@@ -116,4 +116,9 @@ export class PasskeyService {
 
     return await apiService.addUserCredential(makeCredentialRequest, credentialOptionsJson);
   };
+
+  validatePasskey = async (userEmail: string) => {
+    const apiService = new ApiService();
+    const creadentialOptions = await apiService.makeAssertionOptions(userEmail);
+  };
 }

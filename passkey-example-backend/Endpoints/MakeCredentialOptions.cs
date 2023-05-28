@@ -47,7 +47,7 @@ public static class MakeCredentialOptions
             };
 
             // 2. Get user existing keys by username
-            var existingKeys = dbUser.Credentials.Select(c => JsonSerializer.Deserialize<PublicKeyCredentialDescriptor>(c.DescriptorJson)).ToList();
+            var existingKeys = dbUser.Credentials.Select(c => new PublicKeyCredentialDescriptor(c.Descriptor)).ToList();
 
             // 3. Create options
             var authenticatorSelection = new AuthenticatorSelection

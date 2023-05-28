@@ -58,12 +58,21 @@ export class ApiService {
   };
 
   queryUser = async (email: string): Promise<Array<any>> => {
-    const response = await fetch(`${this.apiUrl}/users?q=${email}`, {
+    const response = await fetch(`${this.apiUrl}/users?q=${email}`);
+    return response.json();
+  };
+
+  makeAssertionOptions = async (email: string) => {
+    const response = await fetch(`${this.apiUrl}/makeAssertionOptions`, {
       method: 'POST',
+      body: JSON.stringify({
+        UserName: email,
+      }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
     });
+
     return response.json();
   };
 }

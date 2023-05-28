@@ -1,12 +1,12 @@
 <template>
   <form @submit.prevent="createUser">
     <input type="text" v-model="email" placeholder="email" autocomplete="username webauthn" />
-    <div class="error" v-if="userExists">User already exists</div>
+    <div class="error" v-if="userError">{{ userError }}</div>
     <button type="submit">Create user</button>
   </form>
   <div v-if="browserHasWebAuthnSupport">
     <div class="login-with-passkey">— or —</div>
-    <button>Login with Passkey</button>
+    <button @click="login">Login with Passkey</button>
   </div>
 </template>
 
@@ -19,18 +19,32 @@ import { StorageService } from '@/services/storage.service';
 const router = useRouter();
 
 const email = ref('');
-const userExists = ref(false);
+const userError = ref('');
 const passKeyService = new PasskeyService();
 
 const createUser = async () => {
-  userExists.value = (await new ApiService().queryUser(email.value))?.length > 0;
+  userError.value = '';
+  const userExists = (await new ApiService().queryUser(email.value))?.length > 0;
 
-  if (userExists.value) {
+  if (!userExists) {
     const user = await new ApiService().createUser(email.value);
     new StorageService().setAuthenticatedUserId(user.id);
     // Redirect to user view
 
     router.push({ name: 'User' });
+  } else {
+    userError.value = 'User already exists';
+  }
+};
+
+const login = async () => {
+  userError.value = '';
+  const userExists = (await new ApiService().queryUser(email.value))?.length > 0;
+
+  if (userExists) {
+    passKeyService.validatePasskey(email.value);
+  } else {
+    userError.value = 'User not exists';
   }
 };
 
