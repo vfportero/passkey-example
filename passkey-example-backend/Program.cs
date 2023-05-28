@@ -1,3 +1,4 @@
+ using Microsoft.AspNetCore.Mvc;
  using Microsoft.EntityFrameworkCore;
  using passkey_example_backend.Data;
  using passkey_example_backend.Endpoints;
@@ -43,7 +44,7 @@
  app.MapPost("/makeCredentialOptions", MakeCredentialOptions.Execute);
 
 
- static async Task<IResult> QueryUsers(UserDb db, string? q = null)
+ static async Task<IResult> QueryUsers(UserDb db, [FromQuery] string? q = null)
  {
      List<User>? users;
      if (!string.IsNullOrEmpty(q))
