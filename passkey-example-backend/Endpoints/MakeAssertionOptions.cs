@@ -28,7 +28,7 @@ public static class MakeAssertionOptions
                 var dbUser = db.Users.FirstOrDefault(x => x.Email == request.UserName) ?? throw new ArgumentException("Username was not registered");
 
                 // 2. Get registered credentials from database
-                existingCredentials = dbUser.Credentials
+                existingCredentials = db.UserCredentials
                     .Where(c => c.UserId == dbUser.Id)
                     .Select(c => new PublicKeyCredentialDescriptor(c.Descriptor))
                     .ToList();
