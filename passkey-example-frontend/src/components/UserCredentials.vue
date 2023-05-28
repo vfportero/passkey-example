@@ -28,7 +28,12 @@ const getBrowserHasPasskeyFeature = async () => {
 };
 
 const createNewPassKey = async () => {
-  return await passKeyService.createPasskey(props.user?.email);
+  const response = await passKeyService.createPasskey(props.user?.email);
+  if (response.success.status === 'ok') {
+    fetchUserCredentials().then((data) => {
+      userCredentials.value = data;
+    });
+  }
 };
 
 const browserHasPasskeyFeature = ref();
