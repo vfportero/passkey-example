@@ -51,4 +51,9 @@ export class ApiService {
     const response = await fetch(`${this.apiUrl}/users/${id}`);
     return response.json();
   };
+
+  getUserCredentials = async (id: string) => {
+    const response = await fetch(`${this.apiUrl}/users/${id}/credentials`);
+    return response.json();
+  };
 }
