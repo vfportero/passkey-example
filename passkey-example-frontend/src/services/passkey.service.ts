@@ -123,14 +123,13 @@ export class PasskeyService {
 
     const makeAssertionOptionsJson = JSON.stringify(makeAssertionOptions);
 
-    // todo: switch this to coercebase64
-    const challenge = makeAssertionOptions.challenge.replace(/-/g, '+').replace(/_/g, '/');
-    makeAssertionOptions.challenge = Uint8Array.from(atob(challenge), (c) => c.charCodeAt(0));
+    const challenge = this.coerceToBase64Url(makeAssertionOptions);
+    makeAssertionOptions.challenge = this.coerceToArrayBuffer(challenge);
 
     // fix escaping. Change this to coerce
-    makeAssertionOptions.allowCredentials.forEach(function (listItem: any) {
-      const fixedId = listItem.id.replace(/\\_/g, '/').replace(/\\-/g, '+');
-      listItem.id = Uint8Array.from(atob(fixedId), (c) => c.charCodeAt(0));
+    makeAssertionOptions.allowCredentials.forEach((listItem: any) => {
+      const fixedId = this.coerceToBase64Url(listItem.id);
+      listItem.id = this.coerceToArrayBuffer(fixedId);
     });
 
     // ask browser for credentials (browser will ask connected authenticators)
