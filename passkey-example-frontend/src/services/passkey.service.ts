@@ -67,10 +67,18 @@ export class PasskeyService {
 
   browserHasPasskeyFeature = async () => {
     if (window.PublicKeyCredential) {
-      const isCMSupported = (await (PublicKeyCredential as any).isConditionalMediationAvailable?.()) ?? false;
       const isUVSupported = (await (PublicKeyCredential as any).isUserVerifyingPlatformAuthenticatorAvailable?.()) ?? false;
 
-      return isCMSupported && isUVSupported;
+      return (await this.browserHasWebAuthnSupport()) && isUVSupported;
+    }
+    return false;
+  };
+
+  browserHasWebAuthnSupport = async () => {
+    if (window.PublicKeyCredential) {
+      const isCMSupported = (await (PublicKeyCredential as any).isConditionalMediationAvailable?.()) ?? false;
+
+      return isCMSupported;
     }
     return false;
   };

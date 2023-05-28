@@ -56,4 +56,14 @@ export class ApiService {
     const response = await fetch(`${this.apiUrl}/users/${id}/credentials`);
     return response.json();
   };
+
+  queryUser = async (email: string): Promise<Array<any>> => {
+    const response = await fetch(`${this.apiUrl}/users?q=${email}`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    return response.json();
+  };
 }

@@ -29,7 +29,7 @@ const getBrowserHasPasskeyFeature = async () => {
 
 const createNewPassKey = async () => {
   const response = await passKeyService.createPasskey(props.user?.email);
-  if (response.success.status === 'ok') {
+  if (response.status === 'ok') {
     fetchUserCredentials().then((data) => {
       userCredentials.value = data;
     });
