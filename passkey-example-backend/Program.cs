@@ -35,7 +35,7 @@
  app.UseSession();
 
  app.MapGet("/", () => "Hello World!");
- app.MapGet("/users", ListUsers);
+ app.MapGet("/users", QueryUsers);
  app.MapGet("/users/{id}", GetUser);
  app.MapGet("/users/{id}/credentials", GetUserCredentials);
  app.MapPost("/users", CreateUser);
@@ -43,11 +43,19 @@
  app.MapPost("/makeCredentialOptions", MakeCredentialOptions.Execute);
 
 
- static async Task<IResult> ListUsers(UserDb db)
+ static async Task<IResult> QueryUsers(UserDb db, string? q = null)
  {
-     var users = await db.Users.ToListAsync();
+     List<User>? users;
+     if (!string.IsNullOrEmpty(q))
+     {
+         users = await db.Users.Where(x => x.Email.Contains(q)).ToListAsync();
+         return Results.Ok(users);
+     }
+
+     users = await db.Users.ToListAsync();
      return Results.Ok(users);
  }
+
 
  static async Task<IResult> GetUser(UserDb db, Guid id)
  {
