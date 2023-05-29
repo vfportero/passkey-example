@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, watch } from 'vue';
 import { ApiService } from '@/services/api.service';
 import { PasskeyService } from '@/services/passkey.service';
 
@@ -22,6 +22,17 @@ const passKeyService = new PasskeyService();
 const props = defineProps({
   user: Object,
 });
+
+watch(
+  () => props.user,
+  (user) => {
+    if (user) {
+      fetchUserCredentials().then((data) => {
+        userCredentials.value = data;
+      });
+    }
+  },
+);
 
 const getBrowserHasPasskeyFeature = async () => {
   return await passKeyService.browserHasPasskeyFeature();
@@ -42,6 +53,7 @@ getBrowserHasPasskeyFeature().then((data) => {
 });
 
 const fetchUserCredentials = async () => {
+  if (!props.user?.id) return;
   return await apiService.getUserCredentials(props.user?.id);
 };
 
