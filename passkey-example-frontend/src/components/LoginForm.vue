@@ -6,7 +6,7 @@
   </form>
   <div v-if="browserHasWebAuthnSupport">
     <div class="login-with-passkey">— or —</div>
-    <button @click="loginWithPasskey">Login with Passkey</button>
+    <button @click="login">Login with Passkey</button>
   </div>
 </template>
 
@@ -38,8 +38,9 @@ const createUser = async () => {
   }
 };
 
-const loginWithPasskey = async () => {
+const login = async () => {
   userError.value = '';
+
   const validateResponse = await passKeyService.validatePasskey(email.value);
   if (validateResponse) {
     storageService.setAuthenticatedUserId(validateResponse.userId);
@@ -55,10 +56,6 @@ const getBrowserHasWebAuthnSupport = async () => {
 const browserHasWebAuthnSupport = ref();
 getBrowserHasWebAuthnSupport().then((data) => {
   browserHasWebAuthnSupport.value = data;
-
-  if (browserHasWebAuthnSupport.value === true) {
-    loginWithPasskey();
-  }
 });
 </script>
 
