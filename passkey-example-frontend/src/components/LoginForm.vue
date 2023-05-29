@@ -6,7 +6,7 @@
   </form>
   <div v-if="browserHasWebAuthnSupport">
     <div class="login-with-passkey">— or —</div>
-    <button @click="login">Login with Passkey</button>
+    <button @click="loginWithPasskey">Login with Passkey</button>
   </div>
 </template>
 
@@ -38,20 +38,14 @@ const createUser = async () => {
   }
 };
 
-const login = async () => {
+const loginWithPasskey = async () => {
   userError.value = '';
-  const userExists = (await new ApiService().queryUser(email.value))?.length > 0;
-
-  if (userExists) {
-    const validateResponse = await passKeyService.validatePasskey(email.value);
-    if (validateResponse) {
-      storageService.setAuthenticatedUserId(validateResponse.userId);
-      router.push({ name: 'User' });
-    } else {
-      userError.value = 'Passkey validation error';
-    }
+  const validateResponse = await passKeyService.validatePasskey(email.value);
+  if (validateResponse) {
+    storageService.setAuthenticatedUserId(validateResponse.userId);
+    router.push({ name: 'User' });
   } else {
-    userError.value = 'User not exists';
+    userError.value = 'Passkey validation error';
   }
 };
 
@@ -61,6 +55,10 @@ const getBrowserHasWebAuthnSupport = async () => {
 const browserHasWebAuthnSupport = ref();
 getBrowserHasWebAuthnSupport().then((data) => {
   browserHasWebAuthnSupport.value = data;
+
+  if (browserHasWebAuthnSupport.value === true) {
+    loginWithPasskey();
+  }
 });
 </script>
 
