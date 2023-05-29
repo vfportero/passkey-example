@@ -75,4 +75,19 @@ export class ApiService {
 
     return response.json();
   };
+
+  makeAssertion = async (data: any, makeAssertionOptionsJson: string) => {
+    const res = await fetch(`${this.apiUrl}/makeAssertion`, {
+      method: 'POST',
+      body: JSON.stringify({
+        ClientResponse: data,
+        AssertionOptions: makeAssertionOptionsJson,
+      }), // data can be `string` or {object}!
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+
+    return await res.json();
+  };
 }

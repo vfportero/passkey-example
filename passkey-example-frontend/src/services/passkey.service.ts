@@ -158,27 +158,7 @@ export class PasskeyService {
         },
       };
 
-      let response;
-      try {
-        const res = await fetch('/makeAssertion', {
-          method: 'POST', // or 'PUT'
-          body: JSON.stringify({
-            ClientResponse: data,
-            AssertionOptions: makeAssertionOptionsJson,
-          }), // data can be `string` or {object}!
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        });
-
-        response = await res.json();
-      } catch (e) {
-        console.error('Request to server failed', e);
-        throw e;
-      }
-
-      console.log('Assertion Object', response);
+      const response = await apiService.makeAssertion(data, makeAssertionOptionsJson);
 
       // show error
       if (response.status !== 'ok') {

@@ -33,12 +33,15 @@ nav a.router-link-exact-active {
 }
 
 footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
-  padding: 30px;
   background-color: #42b983;
   color: #fff;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 form {
