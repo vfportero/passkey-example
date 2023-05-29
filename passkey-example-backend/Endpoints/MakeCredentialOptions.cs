@@ -52,7 +52,7 @@ public static class MakeCredentialOptions
             // 3. Create options
             var authenticatorSelection = new AuthenticatorSelection
             {
-                // ResidentKey = residentKey.ToEnum<ResidentKeyRequirement>(),
+                RequireResidentKey = true,
                 UserVerification = request.UserVerification.ToEnum<UserVerificationRequirement>()
             };
 
